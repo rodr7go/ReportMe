@@ -29,6 +29,7 @@
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
 	<link href="/css/pe-icon-7-stroke.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 
 	@yield('styles')
 
@@ -72,24 +73,34 @@
 
 	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
 	<script src="/js/demo.js"></script>
-
-	<script type="text/javascript">
-		$(document).ready(function(){
-
-			demo.initChartist();
-
-			$.notify({
-				icon: 'pe-7s-gift',
-				message: "Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer."
-
-			},{
-				type: 'info',
-				timer: 4000
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+	<script>
+		$(function(){
+			$('.sweetAlert').on('click', function(e){
+				$this = $(this);
+				e.preventDefault();
+				swal({
+					title: "Are you sure?",
+					text: "You will not be able to recover this imaginary file!",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Yes, delete it!",
+					cancelButtonText: "No, cancel plx!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				}, function(isConfirm){
+					if (isConfirm) {
+						var link = $this.attr('href');
+						window.location = link;
+					}
+					else {
+						swal("Cancelled", "Your imaginary file is safe :)", "error");
+					}
+				});
 			});
-
 		});
 	</script>
-
 	@yield('scripts')
 	
 </body>

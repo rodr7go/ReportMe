@@ -46,9 +46,8 @@ class ReportsController extends Controller
     {
         $report  = Report::create( $request->except(['image1', 'image2', 'image3']) );
 
-        $this->uploadImages($request, $report);
+        $this->storeImages($request, $report);
         return redirect()->route('reports.index');
-
     }
 
     /**
@@ -102,7 +101,10 @@ class ReportsController extends Controller
     {
         $report = Report::findOrFail($id);
 
-        $report->delete();
+        if ($report->delete())
+        {
+            \File::deleteDirectory(public_path('uploads/reports/'.$report->id));
+        }
 
         return redirect()->route('reports.index');
     }
@@ -114,53 +116,70 @@ class ReportsController extends Controller
         return view('reports.admin.index', compact('reports'));
     }
 
+    public function storeImages($request, $report)
+    {
+        for ($i = 1; $i <= 3; $i++)
+        {
+            if ( $request->hasFile('image' . $i) && $request->file('image' . $i)->isValid())
+            {
+                $file = $request->file('image' . $i);
+                $fileExt = $file->getClientOriginalExtension();
+                $directory = 'reports/'. $report->id .'/';
+                $image = $directory . 'image'. $i . '.' .  $fileExt;
+                
+                switch ($i) {
+                    case 1:
+                        $report->image1 = 'image1.' . $fileExt;
+                        break;
+                    case 2:
+                        $report->image2 = 'image2.' . $fileExt;
+                        break;
+                    case 3:
+                        $report->image3 = 'image3.' . $fileExt;
+                        break;
+                }
+                $report->save();
+                \Storage::disk('local')->put($image,  \File::get($file));
+            }
+        }
+    }
+
     public function uploadImages($request, $report)
     {
-        for( $i=1; $i <= 3; $i++ )
+        for ($i = 1; $i <= 3; $i++)
         {
-            if ( $request->hasFile('image'.$i) && $request->file('image'.$i)->isValid())
+            if ( $request->hasFile('image' . $i) && $request->file('image' . $i)->isValid())
             {
-                if ($i ==1 )
-                {
-                    if (  \Storage::disk('local')->exists('reports/' . $report->id . '/' . $report->image1) )
-                    {
-                        \Storage::delete('reports/' . $report->id . '/' . $report->image1);
-                    }
-                    
-                    $file = $request->file('image'.$i);
-                    $fileExt = $file->getClientOriginalExtension();
-                    \Storage::disk('local')->put('reports/' . $report->id . '/image1.' .  $fileExt ,  \File::get($file));
-                    $report->image1 = 'image1.'.$fileExt;
-                    $report->save();
+                $file = $request->file('image' . $i);
+                $fileExt = $file->getClientOriginalExtension();
+                $directory = 'reports/'. $report->id .'/';
+                $image = $directory . 'image'. $i . '.' .  $fileExt;
+                
+                switch ($i) {
+                    case 1:
+                        if (\Storage::disk('local')->exists($directory.$report->image1))
+                        {
+                            \Storage::delete($directory.$report->image1);
+                            $report->image1 = 'image1.' . $fileExt;
+                            break;
+                        }
+                    case 2:
+                        if (\Storage::disk('local')->exists($directory.$report->image2))
+                        {
+                            \Storage::delete($directory.$report->image2);
+                            $report->image2 = 'image2.' . $fileExt;
+                            break;
+                        }
+                    case 3:
+                        if (\Storage::disk('local')->exists($directory.$report->image3))
+                        {
+                            \Storage::delete($directory.$report->image3);
+                            $report->image3 = 'image3.' . $fileExt;
+                            break;
+                        }
                 }
-
-                 if ($i ==2 )
-                {
-                    if (  \Storage::disk('local')->exists('reports/' . $report->id . '/' . $report->image2) )
-                    {
-                        \Storage::delete('reports/' . $report->id . '/' . $report->image2);
-                    }
-                    
-                    $file = $request->file('image'.$i);
-                    $fileExt = $file->getClientOriginalExtension();
-                    \Storage::disk('local')->put('reports/' . $report->id . '/image2.' .  $fileExt ,  \File::get($file));
-                    $report->image1 = 'image2.'.$fileExt;
-                    $report->save();
-                }
-
-                //  if ($i ==1 )
-                // {
-                //     if (  \Storage::disk('local')->exists('reports/' . $report->id . '/' . $report->image1) )
-                //     {
-                //         \Storage::delete('reports/' . $report->id . '/' . $report->image1);
-                //     }
-                    
-                //     $file = $request->file('image'.$i);
-                //     $fileExt = $file->getClientOriginalExtension();
-                //     \Storage::disk('local')->put('reports/' . $report->id . '/image1.' .  $fileExt ,  \File::get($file));
-                //     $report->image1 = 'image1.'.$fileExt;
-                //     $report->save();
-                // }
+                $report->save();
+                \Storage::disk('local')->put($image,  \File::get($file));
             }
         }
     }

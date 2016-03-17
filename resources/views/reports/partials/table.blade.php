@@ -46,7 +46,7 @@
 				<td>
 					<a href=" {!! route('reports.edit', $report) !!}" style="display:inline-block; margin-right: 5px;"><i class="fa fa-pencil-square fa-2x"></i></a>
 					
-					<a href=" {!! route('reports.delete', $report) !!} "><i class="fa fa-times-circle fa-2x text-danger"></i></a>
+					<a class="sweetAlert" href=" {!! route('reports.delete', $report) !!} "><i class="fa fa-times-circle fa-2x text-danger"></i></a>
 				</td>
 			</tr>
 			@endforeach

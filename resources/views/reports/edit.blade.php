@@ -2,6 +2,8 @@
 @section('title')
 	Editar Reporte
 @endsection
+@include('reports.partials.styles')
+
 @section('content')
 
 	<div class="row">
@@ -12,7 +14,7 @@
 					<!-- <p class="category"></p> -->
 				</div>
 				<div class="content">
-					{!! Form::model($reports, ['url' => route('reports.update', $reports), 'method' => 'PUT']) !!}
+					{!! Form::model($report, ['url' => route('reports.update', $report), 'method' => 'PUT', 'files' => 'true']) !!}
 						@include('reports.partials.form', [ 'submit_text' => 'Editar' ])
 					{!! Form::close() !!}
 				</div>
@@ -20,3 +22,6 @@
 		</div>
 	</div>
 @endsection
+
+@include('reports.partials.scripts')
+	

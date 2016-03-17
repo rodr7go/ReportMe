@@ -36,8 +36,6 @@ class EditReportRequest extends Request
             'description' => 'required',
             'user_id' => 'required',
             'admin_id' => 'required',
-            'status'  => 'required',
-            'answer' => 'required',
         ];
     }
 }

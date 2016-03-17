@@ -20,8 +20,11 @@ class CreateReportsTable extends Migration
             $table->integer('admin_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('admin_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('status');
+            $table->string('status');
             $table->string('answer');
+            $table->string('image1');
+            $table->string('image2');
+            $table->string('image3');
             $table->timestamps();
         });
     }

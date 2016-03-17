@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Report;
+use App\User;
 
 class ReportsController extends Controller
 {
@@ -28,8 +29,11 @@ class ReportsController extends Controller
      */
     public function create()
     {
+        $report = new Report;
 
-        return view('reports.create');
+        $users = User::lists('name', 'id');
+
+        return view('reports.create', compact('users', 'report'));
     }
 
     /**
@@ -40,7 +44,9 @@ class ReportsController extends Controller
      */
     public function store(\App\Http\Requests\Reports\CreateReportRequest $request)
     {
-        $reports  = Report::create( $request->all() );
+        $report  = Report::create( $request->except(['image1', 'image2', 'image3']) );
+
+        $this->uploadImages($request, $report);
         return redirect()->route('reports.index');
 
     }
@@ -64,9 +70,10 @@ class ReportsController extends Controller
      */
     public function edit($id)
     {
-        $reports = Report::findOrFail($id);
+        $report = Report::findOrFail($id);
+        $users = User::lists('name', 'id');
 
-        return view('reports.edit', compact('reports'));
+        return view('reports.edit', compact('users', 'report'));
     }
 
     /**
@@ -78,9 +85,9 @@ class ReportsController extends Controller
      */
     public function update(\App\Http\Requests\Reports\EditReportRequest $request, $id)
     {
-        $reports = Report::findOrFail($id);
-
-        $reports->update($request->all() );
+        $report = Report::findOrFail($id);
+        $report->update($request->except(['image1', 'image2', 'image3']) );
+        $this->uploadImages($request, $report);
 
         return redirect()->route('reports.index');
     }
@@ -93,10 +100,68 @@ class ReportsController extends Controller
      */
     public function destroy($id)
     {
-        $reports = Report::findOrFail($id);
+        $report = Report::findOrFail($id);
 
-        $reports->delete();
+        $report->delete();
 
         return redirect()->route('reports.index');
+    }
+
+
+    public function adminIndex()
+    {
+        $reports = Report::paginate(3);
+        return view('reports.admin.index', compact('reports'));
+    }
+
+    public function uploadImages($request, $report)
+    {
+        for( $i=1; $i <= 3; $i++ )
+        {
+            if ( $request->hasFile('image'.$i) && $request->file('image'.$i)->isValid())
+            {
+                if ($i ==1 )
+                {
+                    if (  \Storage::disk('local')->exists('reports/' . $report->id . '/' . $report->image1) )
+                    {
+                        \Storage::delete('reports/' . $report->id . '/' . $report->image1);
+                    }
+                    
+                    $file = $request->file('image'.$i);
+                    $fileExt = $file->getClientOriginalExtension();
+                    \Storage::disk('local')->put('reports/' . $report->id . '/image1.' .  $fileExt ,  \File::get($file));
+                    $report->image1 = 'image1.'.$fileExt;
+                    $report->save();
+                }
+
+                 if ($i ==2 )
+                {
+                    if (  \Storage::disk('local')->exists('reports/' . $report->id . '/' . $report->image2) )
+                    {
+                        \Storage::delete('reports/' . $report->id . '/' . $report->image2);
+                    }
+                    
+                    $file = $request->file('image'.$i);
+                    $fileExt = $file->getClientOriginalExtension();
+                    \Storage::disk('local')->put('reports/' . $report->id . '/image2.' .  $fileExt ,  \File::get($file));
+                    $report->image1 = 'image2.'.$fileExt;
+                    $report->save();
+                }
+
+                //  if ($i ==1 )
+                // {
+                //     if (  \Storage::disk('local')->exists('reports/' . $report->id . '/' . $report->image1) )
+                //     {
+                //         \Storage::delete('reports/' . $report->id . '/' . $report->image1);
+                //     }
+                    
+                //     $file = $request->file('image'.$i);
+                //     $fileExt = $file->getClientOriginalExtension();
+                //     \Storage::disk('local')->put('reports/' . $report->id . '/image1.' .  $fileExt ,  \File::get($file));
+                //     $report->image1 = 'image1.'.$fileExt;
+                //     $report->save();
+                // }
+            }
+        }
     }
 }

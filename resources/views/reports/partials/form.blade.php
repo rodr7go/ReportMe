@@ -1,3 +1,5 @@
+{!! Form::hidden('user_id', 1 ) !!}
+{!! Form::hidden('admin_id', 2 ) !!}
 <div class="row">
 	<div class="col-md-12">
 		<div class="form-group">
@@ -6,6 +8,7 @@
 		</div>
 	</div>
 </div>
+
 <div class="row">
 	<div class="col-md-6">
 		<div class="form-group">
@@ -14,33 +17,16 @@
 		</div>
 	</div>
 	<div class="col-md-6">
-		<div class="form-group">
-			{!! Form::label('user_id', 'Usuario') !!}
-			{!! Form::text('user_id', null, [ 'class' => 'form-control' ]) !!}
-		</div>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-md-6">
-		<div class="form-group">
-			{!! Form::label('admin_id', 'Administrador') !!}
-			{!! Form::text('admin_id', null, [ 'class' => 'form-control' ]) !!}
-		</div>
+		{!! Form::label('image1', 'imagen 1') !!}
+		{!! Form::file('image1', ['class' => 'form-control']) !!}
 	</div>
 	<div class="col-md-6">
-		<div class="form-group">
-			{!! Form::label('status', 'Status') !!}
-			{!! Form::text('status', null, [ 'class' => 'form-control' ]) !!}
-		</div>
+		{!! Form::label('image2', 'imagen 2') !!}
+		{!! Form::file('image2', ['class' => 'form-control']) !!}
 	</div>
-</div>
-<div class="row">
 	<div class="col-md-6">
-		<div class="form-group">
-			{!! Form::label('answer', 'Respuesta') !!}
-			{!! Form::text('answer', null, [ 'class' => 'form-control' ]) !!}
-		</div>
+		{!! Form::label('image3', 'imagen 3') !!}
+		{!! Form::file('image3', ['class' => 'form-control']) !!}
 	</div>
 </div>
 
@@ -55,4 +41,5 @@
 		</ul>
 	</div>
 @endif
+
 <div class="clearfix"></div>

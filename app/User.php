@@ -40,4 +40,8 @@ class User extends Model implements AuthenticatableContract,
     public function buildings (){
         return $this->belongsToMany('\App\Building');
     }
+
+    public function reports (){
+        return $this->hasMany('\App\Report');
+    }
 }

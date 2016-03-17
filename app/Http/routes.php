@@ -17,7 +17,9 @@ Route::get('/', function () {
 
 Route::resource('users', 'UsersController');
 Route::get('users/{users}/delete', [ 'as' => 'users.delete', 'uses' => 'UsersController@destroy' ]);
+
 Route::resource('buildings', 'BuildingsController');
 Route::get('buildings/{buildings}/delete', [ 'as' => 'buildings.delete', 'uses' => 'BuildingsController@destroy' ]);
+Route::get('reports/admin', [ 'as' => 'reports.admin.index', 'uses' => 'ReportsController@adminIndex' ]);
 Route::resource('reports', 'ReportsController');
 Route::get('reports/{reports}/delete', [ 'as' => 'reports.delete', 'uses' => 'ReportsController@destroy' ]);

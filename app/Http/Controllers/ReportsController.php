@@ -18,7 +18,8 @@ class ReportsController extends Controller
      */
     public function index()
     {
-        $reports = Report::paginate(5);
+        $reports = Report::all();
+        // dd($reports);
         return view('reports.index', compact('reports'));
     }
 
@@ -45,7 +46,6 @@ class ReportsController extends Controller
     public function store(\App\Http\Requests\Reports\CreateReportRequest $request)
     {
         $report  = Report::create( $request->except(['image1', 'image2', 'image3']) );
-
         $this->storeImages($request, $report);
         return redirect()->route('reports.index');
     }
@@ -107,13 +107,6 @@ class ReportsController extends Controller
         }
 
         return redirect()->route('reports.index');
-    }
-
-
-    public function adminIndex()
-    {
-        $reports = Report::paginate(3);
-        return view('reports.admin.index', compact('reports'));
     }
 
     public function storeImages($request, $report)
@@ -182,5 +175,22 @@ class ReportsController extends Controller
                 \Storage::disk('local')->put($image,  \File::get($file));
             }
         }
+    }
+
+    public function response ($report_id)
+    {
+        return view('reports.admin.response', compact('report_id'));
+    }
+
+    public function saveResponse(Request $request, $report_id)
+    {   
+        $report = Report::findOrFail($report_id);
+
+        $report->answer = $request->get('answer');
+        $report->status = $request->get('status');
+
+        $report->update();
+
+        return redirect()->route('reports.index');
     }
 }

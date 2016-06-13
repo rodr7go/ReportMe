@@ -11,16 +11,25 @@
 			{!! Form::email('email', null, [ 'class' => 'form-control' ]) !!}
 		</div>
 	</div>
-	<div class="col-md-6">
+</div>
+
+<div class="row">
+	<div class="col-md-4">
 		<div class="form-group">
 			{!! Form::label('building_id', 'Edificio') !!}
-			{!! Form::select('building_id',$buildings, $user->buildings->first()['id'], [ 'class' => 'form-control' ]) !!}
+			{!! Form::select('building_id',$buildings, $user->buildings->first()['id'], [ 'class' => 'form-control select2' ]) !!}
 		</div>
 	</div>
-	<div class="col-md-6">
+	<div class="col-md-4">
 		<div class="form-group">
 			{!! Form::label('apt_number', 'Numero de departamento') !!}
 			{!! Form::text('apt_number', null, [ 'class' => 'form-control' ]) !!}
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="form-group">
+			{!! Form::label('role_id', 'Perfil') !!}
+			{!! Form::select('role_id',$roles, $user->roles->first()['id'], [ 'class' => 'form-control select2' ]) !!}
 		</div>
 	</div>
 </div>

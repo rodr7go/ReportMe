@@ -20,7 +20,7 @@ class ReportTableSeeder extends Seeder
 				'description' => $faker->word,
 				'user_id' => rand(1,6),
 				'admin_id' => rand(1,6),
-				'status' => rand(1,6),
+				'status' => rand(1,3),
 				'answer' => $faker->word,
 			]);			
 		}

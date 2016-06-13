@@ -11,8 +11,9 @@
 					<!-- <p class="category"></p> -->
 				</div>
 				<div class="content">
-					<a href=" {!! route('reports.create') !!} " class="btn btn-primary">Nuevo Reporte</a>
-					<a href=" {!! route('reports.admin.index') !!} " class="btn btn-primary">Reportes Admin</a>
+					@role(['super_admin', 'resident'])
+					<a href=" {!! route('reports.create') !!} " class="btn btn-primary m-b-2em">Nuevo Reporte</a>
+					@endrole
 					@include('reports.partials.table')
 				</div>
 			</div>

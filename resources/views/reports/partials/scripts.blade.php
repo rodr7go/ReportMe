@@ -6,7 +6,7 @@
 	<script>
 	//switchery
 		var elem = document.querySelector('.switchery');
-		var init = new Switchery(elem);
+		var init = new Switchery(elem, { secondaryColor: '#cccccc',  'color': '#a9db59','jackColor': '#87CB16'});
 	</script>
 
 	<script type="text/javascript">

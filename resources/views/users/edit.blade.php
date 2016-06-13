@@ -2,6 +2,9 @@
 @section('title')
 	Editar Usuario
 @endsection
+
+@include('reports.partials.styles')
+
 @section('content')
 
 	<div class="row">
@@ -19,4 +22,7 @@
 			</div>
 		</div>
 	</div>
+
 @endsection
+
+@include('reports.partials.scripts')

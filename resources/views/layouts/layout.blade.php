@@ -29,7 +29,11 @@
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
 	<link href="/css/pe-icon-7-stroke.css" rel="stylesheet" />
+	<!--       Plugins        -->
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.0.2/css/responsive.dataTables.css">
+
 
 	@yield('styles')
 
@@ -73,20 +77,27 @@
 
 	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
 	<script src="/js/demo.js"></script>
+
+	<!--    Plugins     -->
+	<script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+	<script src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.js"></script>
 	<script>
 		$(function(){
+			//Sweetalerts
 			$('.sweetAlert').on('click', function(e){
-				$this = $(this);
 				e.preventDefault();
+				var $this = $(this);
+				var name = $this.data('name');
+
 				swal({
-					title: "Are you sure?",
-					text: "You will not be able to recover this imaginary file!",
+					title: "Estas seguro?",
+					text: "Borrar " + name,
 					type: "warning",
 					showCancelButton: true,
 					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Yes, delete it!",
-					cancelButtonText: "No, cancel plx!",
+					confirmButtonText: "Si, borrar" + name + "!",
+					cancelButtonText: "No, cancelar por favor",
 					closeOnConfirm: false,
 					closeOnCancel: false
 				}, function(isConfirm){
@@ -95,9 +106,14 @@
 						window.location = link;
 					}
 					else {
-						swal("Cancelled", "Your imaginary file is safe :)", "error");
+						swal("Cancelado", name + "no fue borrado :)", "error");
 					}
 				});
+			});
+
+			//Datatables
+			$('.dataTable').dataTable({
+				responsive: true,
 			});
 		});
 	</script>

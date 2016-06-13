@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\User;
 use App\Building;
+use App\Role;
 
 class UsersController extends Controller
 {
@@ -18,7 +18,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(5);
+        $users = User::all();
         return view('users.index', compact('users'));
     }
 
@@ -30,9 +30,10 @@ class UsersController extends Controller
     public function create()
     {
         $user = new User;
-
         $buildings = Building::lists('name', 'id');
-        return view('users.create', compact('buildings', 'user'));
+        $roles = Role::lists('name', 'id');
+
+        return view('users.create', compact('roles' ,'buildings', 'user'));
     }
 
     /**
@@ -44,7 +45,11 @@ class UsersController extends Controller
     public function store(\App\Http\Requests\Users\CreateUserRequest $request)
     {
         $user  = User::create( $request->all() );
+        $user->password = bcrypt($user->password);
+        $user->update();
         $user->buildings()->attach($request->get('building_id'));
+        $user->roles()->attach($request->get('role_id'));
+
         return redirect()->route('users.index');
 
     }
@@ -70,9 +75,9 @@ class UsersController extends Controller
     {
         $user = User::findOrFail($id);
         $buildings = Building::lists('name', 'id');
+        $roles = Role::lists('name', 'id');
 
-
-        return view('users.edit', compact('user', 'buildings'));
+        return view('users.edit', compact('user', 'buildings', 'roles'));
     }
 
     /**
@@ -85,19 +90,21 @@ class UsersController extends Controller
     public function update(\App\Http\Requests\Users\EditUserRequest $request, $id)
     {
         $user = User::findOrFail($id);
-        $userBOld = $user->buildings->first()['id'];
 
-        $user->update($request->all() );
-        
-        if ( count($user->buildings) > 0 && $userBOld != $request->get('building_id') )
+        if ($request->has('password'))
         {
-            foreach($user->buildings as $building)
-            {
-                $user->buildings()->detach($building->id);
-            }
-            
-            $user->buildings()->attach($request->get('building_id'));
+            $user->update($request->all());
+            $user->password = bcrypt($user->password);
+            $user->update();
         }
+        else
+        {
+            $user->update($request->except('password'));
+        }
+        
+        
+        $user->buildings()->sync([$request->get('building_id')]);
+        $user->roles()->sync([$request->get('role_id')]);
 
         return redirect()->route('users.index');
     }

@@ -2,7 +2,7 @@
 	<div class="container-fluid">
 		<nav class="pull-left">
 			<ul>
-				<li>
+				<!-- <li>
 					<a href="#">
 						Home
 					</a>
@@ -21,7 +21,7 @@
 					<a href="#">
 					   Blog
 					</a>
-				</li>
+				</li> -->
 			</ul>
 		</nav>
 		<p class="copyright pull-right">

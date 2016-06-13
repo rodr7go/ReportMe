@@ -2,6 +2,9 @@
 @section('title')
 	Crear usuario
 @endsection
+
+@include('reports.partials.styles')
+
 @section('content')
 
 	<div class="row">
@@ -20,3 +23,5 @@
 		</div>
 	</div>
 @endsection
+
+@include('reports.partials.scripts')
